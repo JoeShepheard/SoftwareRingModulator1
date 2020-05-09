@@ -11,7 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-// potential include needed?
+// potential #include needed?
 //==============================================================================
 SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
