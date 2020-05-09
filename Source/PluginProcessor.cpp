@@ -11,7 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
+// potential include needed?
 //==============================================================================
 SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -25,6 +25,9 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
                        )
 #endif
 {
+    angleDelta = 0.0;
+    currentSR = 0.0;
+    currentAngle = 0.0;
 }
 
 SoftwareRingModulatorAudioProcessor::~SoftwareRingModulatorAudioProcessor()
@@ -100,6 +103,7 @@ void SoftwareRingModulatorAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    currentSR = sampleRate;
 }
 
 void SoftwareRingModulatorAudioProcessor::releaseResources()
@@ -132,23 +136,26 @@ bool SoftwareRingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLay
 }
 #endif
 
+void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
+{
+   auto cyclesPerSample = 1000 / currentSR;
+      
+      angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;    
+   
+}
+
+
 void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     
-    double currentSampleRate = 0.0, currentAngle = 0.0, angleDelta = 0.0; // [1]
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     
-    void updateAngleDelta();
+  
 
-    auto cyclesPerSample = currentSampleRate;         // [2]
-    angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;                // [3]
+               // [3]
 
-   {
-//TEMP DELELETD  //  auto sampleRate = currentSampleRate;
-   // updateAngleDelta();
-}
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -158,7 +165,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-    {
+   
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -166,42 +173,30 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-        
-     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill); //no &
-       
-        
-        {
-  auto level = 0.125f;
-    auto* leftBuffer  = buffer.getWritePointer (0, buffer.getNumSamples());
-    auto* rightBuffer = buffer.getWritePointer (1, buffer.getNumSamples());
-        auto* device = AudioDeviceManager().getCurrentAudioDevice();
-        auto activeInputChannels  = device->getActiveInputChannels();
-        auto activeOutputChannels = device->getActiveOutputChannels();
-        
+    
+    auto level = 0.125f;
+   
+    // go through channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-       // auto* channelData = buffer.getWritePointer (channel);
-       auto* inBuffer = buffer.getReadPointer(channel);
+        // for inBuffer channel will see where the input is coming in (channel)
+        // for outBuffer channel will see where the output is going to go (channel)
+        auto* inBuffer = buffer.getReadPointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
-    
-     
-        inBuffer = buffer.getReadPointer (totalNumInputChannels,
-                                                                      buffer.getNumSamples());
-        outBuffer = buffer.getWritePointer (totalNumInputChannels, buffer.getNumSamples());
- 
-                for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
-                    outBuffer[sample] = inBuffer[sample];// * level;
-       for (auto samples = 0; samples < buffer.getNumChannels(); ++samples)
-    {
-        auto currentSample = (float) std::sin (currentAngle);
-        currentAngle += angleDelta;
-        leftBuffer[samples]  = currentSample * level;
-        rightBuffer[samples] = currentSample * level;
-    }
-    }
-}
+        //each channel cycled we need to get all the samples inside it
+        for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            // how we calculate what part of the sine wave we use
+            auto currentSample = (float) std::sin (currentAngle);
+            currentAngle += angleDelta;
+            // taking the input effecting it by the sine, taking its level and sending that to our output
+            outBuffer[sample]  = inBuffer[sample] * currentSample * level;
+            
         }
+        
     }
+    
+}
 
 
 //==============================================================================
