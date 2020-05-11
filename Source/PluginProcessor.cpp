@@ -153,6 +153,8 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     
+    
+    
   // level = 0.125;
 
                // [3]
@@ -192,7 +194,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
             outBuffer[sample]  = currentSample * level;
-            inBuffer[sample] = currentSample * level;
+            inBuffer[sample]   = currentSample * level;
             
             
             
