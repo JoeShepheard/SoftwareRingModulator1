@@ -61,12 +61,9 @@ void SoftwareRingModulatorAudioProcessorEditor::resized()
 }
 void  SoftwareRingModulatorAudioProcessorEditor::sliderValueChanged (Slider *slider)
 {
-    if (slider ==&mixSlider)
+    if (slider ==&mixSlider || slider ==&frequencySlider)
     {
         processor.level = mixSlider.getValue();
-    }
-    else if (slider ==&frequencySlider){
         processor.level = frequencySlider.getValue();
-    }
 }
-
+}
