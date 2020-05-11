@@ -62,7 +62,7 @@ public:
 private:
     
     void updateAngleDelta();
-    double angleDelta, currentSample, currentAngle;
+    double angleDelta, currentSR, currentAngle;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoftwareRingModulatorAudioProcessor)

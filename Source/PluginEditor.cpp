@@ -28,6 +28,14 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     mixSlider.addListener(this);
     addAndMakeVisible(mixSlider);
     
+    frequencySlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+    frequencySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxAbove, true, 80, 30);
+    frequencySlider.setRange(0.0f, 100.0f, 0.1f);
+    frequencySlider.setTextValueSuffix("percent");
+    frequencySlider.addListener(this);
+    addAndMakeVisible(frequencySlider);
+    
+    
 }
 
 SoftwareRingModulatorAudioProcessorEditor::~SoftwareRingModulatorAudioProcessorEditor()
@@ -44,6 +52,7 @@ void SoftwareRingModulatorAudioProcessorEditor::paint (Graphics& g)
 void SoftwareRingModulatorAudioProcessorEditor::resized()
 {
     mixSlider.setBounds(getLocalBounds());
+    frequencySlider.setBounds(getLocalBounds());
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
@@ -52,5 +61,8 @@ void  SoftwareRingModulatorAudioProcessorEditor::sliderValueChanged (Slider *sli
     if (slider ==&mixSlider)
     {
         processor.level = mixSlider.getValue();
+    }
+    else if (slider ==&frequencySlider){
+        processor.level = frequencySlider.getValue();
     }
 }

@@ -26,7 +26,7 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
 #endif
 {
     angleDelta = 0.0;
-    currentSample = 0.0;
+    currentSR = 0.0;
     currentAngle = 0.0;
 }
 
@@ -103,7 +103,7 @@ void SoftwareRingModulatorAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    currentSample = sampleRate;
+    currentSR = sampleRate;
 }
 
 void SoftwareRingModulatorAudioProcessor::releaseResources()
@@ -138,7 +138,7 @@ bool SoftwareRingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLay
 
 void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
 {
-   auto cyclesPerSample = 1000 / currentSample;
+   auto cyclesPerSample = 1000 / currentSR;
       
       angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;    
    
@@ -187,7 +187,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             // how we calculate what part of the sine wave we use
-            currentSample = (float) std::sin (currentAngle);
+            auto currentSample = (float) std::sin (currentAngle);
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
             outBuffer[sample]  = inBuffer[sample] * currentSample * level;

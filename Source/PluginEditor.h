@@ -35,6 +35,7 @@ private:
     SoftwareRingModulatorAudioProcessor& processor;
     
     Slider mixSlider;
+    Slider frequencySlider;
     
     
 
