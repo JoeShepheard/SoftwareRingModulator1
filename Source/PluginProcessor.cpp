@@ -184,7 +184,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
         auto* inBuffer = buffer.getReadPointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
         //each channel cycled we need to get all the samples inside it
-        for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             // how we calculate what part of the sine wave we use
             auto currentSample = (float) std::sin (currentAngle);
