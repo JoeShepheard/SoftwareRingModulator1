@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class SoftwareRingModulatorAudioProcessorEditor  : public AudioProcessorEditor
+class SoftwareRingModulatorAudioProcessorEditor  : public AudioProcessorEditor,
+                                                   public Slider::Listener
 {
 public:
     SoftwareRingModulatorAudioProcessorEditor (SoftwareRingModulatorAudioProcessor&);
@@ -25,11 +26,17 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void sliderValueChanged (Slider *slider) override;
 
 private:
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     SoftwareRingModulatorAudioProcessor& processor;
+    
+    Slider mixSlider;
+    
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoftwareRingModulatorAudioProcessorEditor)
 };

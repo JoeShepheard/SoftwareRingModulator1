@@ -26,7 +26,7 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
 #endif
 {
     angleDelta = 0.0;
-    currentSR = 0.0;
+    currentSample = 0.0;
     currentAngle = 0.0;
 }
 
@@ -103,7 +103,7 @@ void SoftwareRingModulatorAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    currentSR = sampleRate;
+    currentSample = sampleRate;
 }
 
 void SoftwareRingModulatorAudioProcessor::releaseResources()
@@ -138,7 +138,7 @@ bool SoftwareRingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLay
 
 void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
 {
-   auto cyclesPerSample = 1000 / currentSR;
+   auto cyclesPerSample = 1000 / currentSample;
       
       angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;    
    
@@ -152,7 +152,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     
-  
+  // level = 0.125;
 
                // [3]
 
@@ -174,26 +174,27 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
     
-    auto level = 0.125f;
+    
    
     // go through channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         // for inBuffer channel will see where the input is coming in (channel)
         // for outBuffer channel will see where the output is going to go (channel)
-      //  auto* inBuffer = buffer.getReadPointer(channel);
+        auto* inBuffer = buffer.getReadPointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
         //each channel cycled we need to get all the samples inside it
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             // how we calculate what part of the sine wave we use
-            auto currentSample = (float) std::sin (currentAngle);
+            currentSample = (float) std::sin (currentAngle);
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
             outBuffer[sample]  = inBuffer[sample] * currentSample * level;
             
+            
         }
-        
+         
     }
     
 }
