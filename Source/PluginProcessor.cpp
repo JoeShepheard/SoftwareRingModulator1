@@ -104,6 +104,7 @@ void SoftwareRingModulatorAudioProcessor::prepareToPlay (double sampleRate, int 
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     currentSR = sampleRate;
+    updateAngleDelta();
 }
 
 void SoftwareRingModulatorAudioProcessor::releaseResources()
@@ -140,7 +141,7 @@ void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
 {
    auto cyclesPerSample = 1000 / currentSR;
       
-      angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;    
+      angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
    
 }
 
@@ -181,16 +182,18 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     {
         // for inBuffer channel will see where the input is coming in (channel)
         // for outBuffer channel will see where the output is going to go (channel)
-        auto* inBuffer = buffer.getReadPointer(channel);
+        auto* inBuffer = buffer.getWritePointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
-        //each channel cycled we need to get all the samples inside it
+        //each chxannel cycled we need to get all the samples inside it
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             // how we calculate what part of the sine wave we use
             auto currentSample = (float) std::sin (currentAngle);
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
-            outBuffer[sample]  = inBuffer[sample] * currentSample * level;
+            outBuffer[sample]  = currentSample * level;
+            inBuffer[sample] = currentSample * level;
+            
             
             
         }
@@ -231,3 +234,4 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SoftwareRingModulatorAudioProcessor();
 }
+
