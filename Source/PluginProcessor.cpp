@@ -181,7 +181,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     {
         // for inBuffer channel will see where the input is coming in (channel)
         // for outBuffer channel will see where the output is going to go (channel)
-        auto* inBuffer = buffer.getReadPointer(channel);
+      //  auto* inBuffer = buffer.getReadPointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
         //each channel cycled we need to get all the samples inside it
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
