@@ -51,9 +51,10 @@ void SoftwareRingModulatorAudioProcessorEditor::paint (Graphics& g)
 
 void SoftwareRingModulatorAudioProcessorEditor::resized()
 {
-    auto sliderLeft = 120;
-       frequencySlider.setBounds (sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
-       mixSlider .setBounds (sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
+    auto sliderLeft = 250;
+    auto sliderRight = -20;
+       frequencySlider.setBounds (sliderRight, 20, getWidth() - sliderRight - 100, 200);
+       mixSlider .setBounds (sliderLeft, 50, getWidth() - sliderLeft - 100, 200);
    
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
