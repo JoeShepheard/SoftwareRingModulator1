@@ -17,7 +17,7 @@
 /**
 */
 class SoftwareRingModulatorAudioProcessorEditor  : public AudioProcessorEditor,
-                                                   public Slider::Listener
+                                                   private Slider::Listener
 {
 public:
     SoftwareRingModulatorAudioProcessorEditor (SoftwareRingModulatorAudioProcessor&);
@@ -27,6 +27,10 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     void sliderValueChanged (Slider *slider) override;
+    
+    Slider mixSlider;
+    Slider frequencySlider;
+    
 
 private:
 
@@ -34,8 +38,7 @@ private:
     // access the processor object that created it.
     SoftwareRingModulatorAudioProcessor& processor;
     
-    Slider mixSlider;
-    Slider frequencySlider;
+   
     
     
 
