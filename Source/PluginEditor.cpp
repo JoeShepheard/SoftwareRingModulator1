@@ -34,7 +34,7 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     
   mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
     mixSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 100, 25);
-    mixSlider.setRange(0.0f, 0.5f, 0.1f);
+    mixSlider.setRange(0.0f, 1.0f, 0.01f);
    // mixSlider.setValue(0.5f);
     mixSlider.setTextValueSuffix("volume");
     mixSlider.addListener(this);
