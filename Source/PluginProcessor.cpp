@@ -140,6 +140,7 @@ bool SoftwareRingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLay
 void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
 {
    auto cyclesPerSample = sinFreq / currentSR;
+    
       
       angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
    
@@ -190,7 +191,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     {
         // for inBuffer channel will see where the input is coming in (channel)
         // for outBuffer channel will see where the output is going to go (channel)
-        auto* inBuffer = buffer.getWritePointer(channel);
+        auto* inBuffer = buffer.getReadPointer(channel);
         auto* outBuffer = buffer.getWritePointer(channel);
         //each chxannel cycled we need to get all the samples inside it
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
@@ -199,8 +200,8 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             auto currentSample = (float) std::sin (currentAngle);
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
-            outBuffer[sample]  = buffer.getSample(channel, sample) * level;
-            inBuffer[sample] = buffer.getSample(channel, sample) * level;
+            outBuffer[sample]  = inBuffer[sample] * currentSample * level;
+           
             
             
             
