@@ -189,10 +189,6 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     // go through channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        // for inBuffer channel will see where the input is coming in (channel)
-        // for outBuffer channel will see where the output is going to go (channel)
-        auto* inBuffer = buffer.getReadPointer(channel);
-        auto* outBuffer = buffer.getWritePointer(channel);
         //each chxannel cycled we need to get all the samples inside it
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
@@ -200,6 +196,10 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             auto currentSample = (float) std::sin (currentAngle);
             currentAngle += angleDelta;
             // taking the input effecting it by the sine, taking its level and sending that to our output
+            // for inBuffer channel will see where the input is coming in (channel)
+            // for outBuffer channel will see where the output is going to go (channel)
+            auto* inBuffer = buffer.getReadPointer(channel);
+            auto* outBuffer = buffer.getWritePointer(channel);
             outBuffer[sample]  = inBuffer[sample] * currentSample * level;
            
             

@@ -21,23 +21,24 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     setSize (400, 300);
     
     
-    mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    mixSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 100, 25);
-    mixSlider.setRange(0.0f, 0.5f, 0.1f);
-   // mixSlider.setValue(0.5f);
-    mixSlider.setTextValueSuffix("mix percent");
-    mixSlider.addListener(this);
-    addAndMakeVisible(mixSlider);
+  
 
     
     frequencySlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     frequencySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxAbove, true, 80, 30);
-    frequencySlider.setRange(0.0f, 100.0f, 0.1f);
+    frequencySlider.setRange(0.0f, 90.0f, 0.1f);
     frequencySlider.setTextValueSuffix("percent");
+    frequencySlider.setValue(currentFrequency, dontSendNotification);
     frequencySlider.addListener(this);
     addAndMakeVisible(frequencySlider);
     
-  
+  mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    mixSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 100, 25);
+    mixSlider.setRange(0.0f, 0.5f, 0.1f);
+   // mixSlider.setValue(0.5f);
+    mixSlider.setTextValueSuffix("volume");
+    mixSlider.addListener(this);
+    addAndMakeVisible(mixSlider);
     
    
     
@@ -60,7 +61,7 @@ void SoftwareRingModulatorAudioProcessorEditor::resized()
     auto sliderRight = -20;
     
        frequencySlider.setBounds (sliderRight, 20, getWidth() - sliderRight - 100, 200);
-       mixSlider .setBounds (sliderLeft, 50, getWidth() - sliderLeft - 100, 200);
+       mixSlider.setBounds (sliderLeft, 50, getWidth() - sliderLeft - 100, 200);
     
    
     // This is generally where you'll want to lay out the positions of any
@@ -68,12 +69,13 @@ void SoftwareRingModulatorAudioProcessorEditor::resized()
 }
 void  SoftwareRingModulatorAudioProcessorEditor::sliderValueChanged (Slider *slider)
 {
-    if (slider ==&mixSlider || slider ==&frequencySlider)
+    if (slider ==&frequencySlider || slider ==&mixSlider)
     {
-      //  processor.level = mixSlider.getValue();
-      //  processor.level = frequencySlider.getValue();
-        
-        processor.setSinFreq(frequencySlider.getValue());
+     // processor.level = mixSlider.getValue();
+     // processor.level = frequencySlider.getValue();
+       
+      processor.setSinFreq(frequencySlider.getValue());
+        processor.level = mixSlider.getValue();
         
         // we should never write a variable from another class instead of this: we use the above
       //  processor.sinFreq = frequencySlider.getValue();
