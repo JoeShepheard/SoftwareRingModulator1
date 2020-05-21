@@ -103,6 +103,8 @@ void SoftwareRingModulatorAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+   // sinFreq.reset(sampleRate, 0.05f); // how the object initialises itself
+   // sinFreq.setTargetValue(1.0f);
     currentSR = sampleRate;
     updateAngleDelta();
 }
@@ -139,7 +141,7 @@ bool SoftwareRingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLay
 
 void SoftwareRingModulatorAudioProcessor::updateAngleDelta()
 {
-   auto cyclesPerSample = sinFreq / currentSR;
+    auto cyclesPerSample = sinFreq / currentSR;
     
       
       angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
@@ -176,7 +178,9 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
    
+    // level.getValue() after *(after outbuffer[sample] = inBuffer[sample] * ((currentSinSample + 1.0f) * 0.5f) level.getValue();
 
+    
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing

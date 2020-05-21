@@ -58,7 +58,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     double level;
-    float sinFreq {0.0f};
+    float sinFreq;
     void updateAngleDelta();
     
     void setSinFreq(float f); // it needs one argument when i call this what freq do you want to set
