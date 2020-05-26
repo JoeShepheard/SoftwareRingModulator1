@@ -11,7 +11,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-// potential #include needed?
 //==============================================================================
 SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -22,12 +21,21 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), parameters(*this, nullptr,  Identifier("M O D"), {
+         std::make_unique<AudioParameterFloat>( // if a float it needs to be atomic<float> if int <int>
+                       "freq",   //parameter ID
+                       "Frequency",    // parameter name
+                       40.0f,    //  min value
+                       2000.0f, // max value
+                       60.0f)       //  default value
+     })
 #endif
 {
     angleDelta = 0.0;
     currentSR = 0.0;
     currentAngle = 0.0;
+    gainParameter = parameters.getRawParameterValue("gain");
+
 }
 
 SoftwareRingModulatorAudioProcessor::~SoftwareRingModulatorAudioProcessor()
@@ -204,7 +212,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             // for outBuffer channel will see where the output is going to go (channel)
             auto* inBuffer = buffer.getReadPointer(channel);
             auto* outBuffer = buffer.getWritePointer(channel);
-            outBuffer[sample]  = inBuffer[sample] * currentSample * level;
+            outBuffer[sample]  = inBuffer[sample] * (currentSample * level * *gainParameter);
            
             
             
@@ -225,7 +233,7 @@ bool SoftwareRingModulatorAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* SoftwareRingModulatorAudioProcessor::createEditor()
 {
-    return new SoftwareRingModulatorAudioProcessorEditor (*this);
+    return new SoftwareRingModulatorAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================

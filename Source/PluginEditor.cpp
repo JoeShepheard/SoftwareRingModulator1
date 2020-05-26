@@ -12,8 +12,9 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEditor (SoftwareRingModulatorAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEditor
+(SoftwareRingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
+: AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 
 {
     // Make sure that before the constructor has finished, you've set the
@@ -38,6 +39,7 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
    // mixSlider.setValue(0.5f);
     mixSlider.setTextValueSuffix("volume");
     mixSlider.addListener(this);
+    gainAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "mix slider", mixSlider));
     addAndMakeVisible(mixSlider);
     
    

@@ -67,7 +67,8 @@ public:
 
 private:
     
-    
+    AudioProcessorValueTreeState parameters;
+    std::atomic<float> *gainParameter = nullptr;
     double angleDelta, currentSR, currentAngle;
     
     //==============================================================================

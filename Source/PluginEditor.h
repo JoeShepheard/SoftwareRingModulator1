@@ -20,7 +20,7 @@ class SoftwareRingModulatorAudioProcessorEditor  : public AudioProcessorEditor,
                                                    private Slider::Listener
 {
 public:
-    SoftwareRingModulatorAudioProcessorEditor (SoftwareRingModulatorAudioProcessor&);
+    SoftwareRingModulatorAudioProcessorEditor (SoftwareRingModulatorAudioProcessor&, AudioProcessorValueTreeState&);
     ~SoftwareRingModulatorAudioProcessorEditor();
 
     //==============================================================================
@@ -37,6 +37,11 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     SoftwareRingModulatorAudioProcessor& processor;
+    AudioProcessorValueTreeState& valueTreeState;
+    std::atomic<float>* gainParameter = nullptr;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
+
+
     double currentFrequency = 500.0, targetFrequency = 500.0; // for sinewave generator
    
     
