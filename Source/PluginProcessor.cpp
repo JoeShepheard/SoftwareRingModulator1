@@ -21,10 +21,10 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       ), parameters(*this, nullptr,  Identifier("M O D"), {
+                       ), parameters(*this, nullptr,  Identifier("RingModulator"), {
          std::make_unique<AudioParameterFloat>( // if a float it needs to be atomic<float> if int <int>
-                       "freq",   //parameter ID
-                       "Frequency",    // parameter name
+                       "gain",   //parameter ID
+                       "Gain",    // parameter name
                        40.0f,    //  min value
                        2000.0f, // max value
                        60.0f)       //  default value
@@ -212,7 +212,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             // for outBuffer channel will see where the output is going to go (channel)
             auto* inBuffer = buffer.getReadPointer(channel);
             auto* outBuffer = buffer.getWritePointer(channel);
-            outBuffer[sample]  = inBuffer[sample] * (currentSample * level * *gainParameter);
+            outBuffer[sample]  = inBuffer[sample] * (currentSample * (level))*  *gainParameter;
            
             
             

@@ -14,7 +14,7 @@
 //==============================================================================
 SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEditor
 (SoftwareRingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
+: AudioProcessorEditor (&p), valueTreeState(vts), processor (p)
 
 {
     // Make sure that before the constructor has finished, you've set the
@@ -33,14 +33,16 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     frequencySlider.addListener(this);
     addAndMakeVisible(frequencySlider);
     
-  mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
     mixSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 100, 25);
     mixSlider.setRange(0.0f, 1.0f, 0.01f);
    // mixSlider.setValue(0.5f);
     mixSlider.setTextValueSuffix("volume");
     mixSlider.addListener(this);
-    gainAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "mix slider", mixSlider));
     addAndMakeVisible(mixSlider);
+    
+    gainAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "mix slider", mixSlider));
+
     
    
     
@@ -76,7 +78,7 @@ void  SoftwareRingModulatorAudioProcessorEditor::sliderValueChanged (Slider *sli
      // processor.level = mixSlider.getValue();
      // processor.level = frequencySlider.getValue();
        
-      processor.setSinFreq(frequencySlider.getValue());
+        processor.setSinFreq(frequencySlider.getValue());
         processor.level = mixSlider.getValue();
         
         // we should never write a variable from another class instead of this: we use the above
