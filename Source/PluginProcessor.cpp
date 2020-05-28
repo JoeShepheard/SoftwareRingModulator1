@@ -25,9 +25,9 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
          std::make_unique<AudioParameterFloat>( // if a float it needs to be atomic<float> if int <int>
                        "gain",   //parameter ID
                        "Gain",    // parameter name
-                       40.0f,    //  min value
-                       2000.0f, // max value
-                       60.0f)       //  default value
+                       0.0f,    //  min value
+                       1.0f, // max value
+                       0.5f)       //  default value
      })
 #endif
 {
@@ -212,7 +212,7 @@ void SoftwareRingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buff
             // for outBuffer channel will see where the output is going to go (channel)
             auto* inBuffer = buffer.getReadPointer(channel);
             auto* outBuffer = buffer.getWritePointer(channel);
-            outBuffer[sample]  = inBuffer[sample] * (currentSample * (level))*  *gainParameter;
+            outBuffer[sample]  = inBuffer[sample] * currentSample * *gainParameter;
            
             
             

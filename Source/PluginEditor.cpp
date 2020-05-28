@@ -41,7 +41,7 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     mixSlider.addListener(this);
     addAndMakeVisible(mixSlider);
     
-    gainAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "mix slider", mixSlider));
+    gainAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "gain", mixSlider));
 
     
    
@@ -79,7 +79,7 @@ void  SoftwareRingModulatorAudioProcessorEditor::sliderValueChanged (Slider *sli
      // processor.level = frequencySlider.getValue();
        
         processor.setSinFreq(frequencySlider.getValue());
-        processor.level = mixSlider.getValue();
+      //  processor.level = mixSlider.getValue();
         
         // we should never write a variable from another class instead of this: we use the above
       //  processor.sinFreq = frequencySlider.getValue();
