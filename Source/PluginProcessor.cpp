@@ -27,7 +27,15 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
                        "Gain",    // parameter name
                        0.0f,    //  min value
                        1.0f, // max value
-                       0.5f)       //  default value
+                       0.5f),       //  default value
+         
+         std::make_unique<AudioParameterFloat>( // if a float it needs to be atomic<float> if int <int>
+                        "freq",   //parameter ID
+                        "Freq",    // parameter name
+                         80.0f,    //  min value
+                         1000.0f, // max value
+                         40.0f)       //  default value
+         
      })
 #endif
 {
@@ -35,8 +43,10 @@ SoftwareRingModulatorAudioProcessor::SoftwareRingModulatorAudioProcessor()
     currentSR = 0.0;
     currentAngle = 0.0;
     gainParameter = parameters.getRawParameterValue("gain");
+    freqParameter = parameters.getRawParameterValue("freq");
 
 }
+
 
 SoftwareRingModulatorAudioProcessor::~SoftwareRingModulatorAudioProcessor()
 {

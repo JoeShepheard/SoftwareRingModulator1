@@ -39,7 +39,9 @@ private:
     SoftwareRingModulatorAudioProcessor& processor;
     AudioProcessorValueTreeState& valueTreeState;
     std::atomic<float>* gainParameter = nullptr;
+    std::atomic<float>* freqParameter = nullptr;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> freqAttachment;
 
 
     double currentFrequency = 500.0, targetFrequency = 500.0; // for sinewave generator

@@ -27,11 +27,13 @@ SoftwareRingModulatorAudioProcessorEditor::SoftwareRingModulatorAudioProcessorEd
     
     frequencySlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     frequencySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxAbove, true, 80, 30);
-    frequencySlider.setRange(0.0f, 90.0f, 0.1f);
-    frequencySlider.setTextValueSuffix("percent");
+    frequencySlider.setRange(80.0f, 1000.0f, 1.0f);
+    frequencySlider.setTextValueSuffix("freq");
     frequencySlider.setValue(currentFrequency, dontSendNotification);
     frequencySlider.addListener(this);
     addAndMakeVisible(frequencySlider);
+    
+    freqAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "freq", frequencySlider));
     
     mixSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
     mixSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 100, 25);
